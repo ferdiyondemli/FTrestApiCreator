@@ -1,6 +1,7 @@
 package com.ft.restApiCreator.controller;
 
-import com.ft.restApiCreator.filecreator.fileComponent.RequestFile;
+
+import com.ft.restApiCreator.fileCreator.fileComponent.RequestFile;
 import com.ft.restApiCreator.service.RestApiFileCreatorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;

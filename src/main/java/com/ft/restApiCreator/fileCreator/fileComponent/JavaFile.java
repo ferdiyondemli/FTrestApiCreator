@@ -1,5 +1,4 @@
-package com.ft.restApiCreator.filecreator.fileComponent;
-
+package com.ft.restApiCreator.fileCreator.fileComponent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class JavaFile {
+    String packageName;
 
     List<String> annotations;
 

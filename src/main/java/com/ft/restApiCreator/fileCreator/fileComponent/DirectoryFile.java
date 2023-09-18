@@ -1,4 +1,4 @@
-package com.ft.restApiCreator.filecreator.fileComponent;
+package com.ft.restApiCreator.fileCreator.fileComponent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +11,6 @@ public class DirectoryFile {
     String directoryName;
     String directoryPath;
     List<JavaFile> javaFiles;
-    List<DirectoryFile>  directoryFiles;
+    List<DirectoryFile> directoryFiles;
 
 }

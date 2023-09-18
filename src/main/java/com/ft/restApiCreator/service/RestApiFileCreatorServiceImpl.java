@@ -1,7 +1,8 @@
 package com.ft.restApiCreator.service;
 
-import com.ft.restApiCreator.filecreator.FileCreator;
-import com.ft.restApiCreator.filecreator.fileComponent.RequestFile;
+
+import com.ft.restApiCreator.fileCreator.FileCreator;
+import com.ft.restApiCreator.fileCreator.fileComponent.RequestFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class RestApiFileCreatorServiceImpl implements RestApiFileCreatorService 
     private final FileCreator fileCreator;
 
     @Override
-    public void createFiles(RequestFile requestFile) {
+    public void createFiles( RequestFile requestFile) {
 
         requestFile.getDirectoryFiles().forEach(directoryFile -> {
             try {

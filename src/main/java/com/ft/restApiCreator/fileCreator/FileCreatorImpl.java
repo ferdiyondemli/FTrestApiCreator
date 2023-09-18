@@ -1,7 +1,6 @@
-package com.ft.restApiCreator.filecreator;
+package com.ft.restApiCreator.fileCreator;
 
-import com.ft.restApiCreator.filecreator.fileComponent.*;
-
+import com.ft.restApiCreator.fileCreator.fileComponent.*;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,7 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class FileCreator {
+public class FileCreatorImpl implements FileCreator {
+    @Override
     public void createDirectory(DirectoryFile directoryFile, String path) throws IOException {
         File f = new File(path + "/" + directoryFile.getDirectoryName());
 
@@ -21,11 +21,13 @@ public class FileCreator {
             if (directoryFile.getDirectoryFiles() != null) {
                 String finalPath = path;
                 directoryFile.getDirectoryFiles().forEach(directoryFiled -> {
+
                     try {
                         createDirectory(directoryFiled, finalPath + "/" + directoryFile.getDirectoryName());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+
 
                 });
 
@@ -47,26 +49,29 @@ public class FileCreator {
 
 
         } else {
-            System.out.println("Directory named as " + directoryFile.getDirectoryName() + " cannot be created");
+            throw new RuntimeException("Directory named as " + directoryFile.getDirectoryName() + " cannot be created " + path);
+
         }
     }
 
 
+    @Override
     public void createJavaFile(JavaFile javaFile, String path) throws IOException {
 
         File myObj = new File(path + "/" + javaFile.getJavaName() + ".java");
         if (myObj.createNewFile()) {
             System.out.println("File created: " + myObj.getName() + path);
-            writeFile(javaFile, myObj.getPath());
+            writeFile(javaFile, myObj.getPath(), path);
         } else {
             System.out.println("File already exists.");
         }
 
     }
 
-    public void writeFile(JavaFile javaFile, String fileName) {
+    @Override
+    public void writeFile(JavaFile javaFile, String fileName, String path) {
 
-        String text = createJavaFileText(javaFile);
+        String text = createJavaFileText(javaFile, path);
         try {
             FileWriter myWriter = new FileWriter(fileName);
             myWriter.write(text);
@@ -78,14 +83,20 @@ public class FileCreator {
         }
     }
 
-    public String createJavaFileText(JavaFile javaFile) {
+    @Override
+    public String createJavaFileText(JavaFile javaFile, String path) {
+        String packageName = "";
+        if (path.contains("java")) {
+            packageName = "package " + path.split("java/")[1].replace("/", ".") + "; \n";
+        }
 
+        return packageName +
 
-        return getAnnotations(javaFile.getAnnotations(), "\n") +
+                getAnnotations(javaFile.getAnnotations(), "\n") +
 
                 "public " + javaFile.getType() + " " + javaFile.getJavaName() +
 
-                getExtenedClass(javaFile.getExtenedClass()) +
+                getExtenedClassText(javaFile.getExtenedClass()) +
 
                 getImplementedInterfaces(javaFile.getImplementedInterfaces()) +
 
@@ -99,15 +110,8 @@ public class FileCreator {
 
     }
 
-    public String getExtenedClass(String extenedClass) {
 
-        if (extenedClass == null) return "";
-
-
-        return " extends " + extenedClass;
-    }
-
-    public String getMethods(List<Method> methods, String type) {
+    private String getMethods(List<Method> methods, String type) {
         if (methods == null) return "";
 
 
@@ -125,7 +129,7 @@ public class FileCreator {
         return string.toString();
     }
 
-    public String getFields(List<Field> fields) {
+    private String getFields(List<Field> fields) {
         if (fields == null) return "";
 
         StringBuilder string = new StringBuilder("\n");
@@ -138,7 +142,7 @@ public class FileCreator {
         return string.toString();
     }
 
-    public String getParametres(List<Parametre> parametres) {
+    private String getParametres(List<Parametre> parametres) {
         if (parametres == null) return "";
 
         StringBuilder string = new StringBuilder("");
@@ -152,29 +156,7 @@ public class FileCreator {
         return string.toString();
     }
 
-    public String getImplementedInterfaces(List<String> implementedInterfaces) {
-        if (implementedInterfaces == null) return "";
-
-        if (implementedInterfaces.size() == 0) {
-            return "";
-        }
-        return " implements " + getListText(implementedInterfaces);
-    }
-
-
-    public String getListText(List<String> strings) {
-        StringBuilder string = new StringBuilder(" ");
-
-        for (int i = 0; i < strings.size(); i++) {
-            String combiner = i == strings.size() - 1 ? " " : "\n";
-            string.append(strings.get(i) + combiner);
-
-        }
-
-        return string.toString();
-    }
-
-    public String getAnnotations(List<String> strings, String combiner) {
+    private String getAnnotations(List<String> strings, String combiner) {
         if (strings == null) return "";
 
         StringBuilder string = new StringBuilder(" ");
@@ -187,4 +169,35 @@ public class FileCreator {
 
 
     }
+
+    private String getImplementedInterfaces(List<String> implementedInterfaces) {
+        if (implementedInterfaces == null) return "";
+
+        if (implementedInterfaces.size() == 0) {
+            return "";
+        }
+        return " implements " + getListText(implementedInterfaces);
+    }
+
+
+    private String getListText(List<String> strings) {
+        StringBuilder string = new StringBuilder(" ");
+
+        for (int i = 0; i < strings.size(); i++) {
+            String combiner = i == strings.size() - 1 ? " " : ",";
+            string.append(strings.get(i) + combiner);
+
+        }
+
+        return string.toString();
+    }
+
+    private String getExtenedClassText(String extenedClass) {
+
+        if (extenedClass == null) return "";
+
+
+        return " extends " + extenedClass;
+    }
+
 }
