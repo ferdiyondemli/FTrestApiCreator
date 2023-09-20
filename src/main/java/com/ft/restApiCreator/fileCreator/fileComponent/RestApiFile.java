@@ -5,9 +5,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+
 @Getter
 @Setter
-public class JavaFile {
+public class RestApiFile {
     String packageName;
 
     List<String> annotations;
@@ -17,8 +18,8 @@ public class JavaFile {
     List<String> implementedInterfaces;
 
     List<Field> fields;
-    List<Method>  methods;
+    List<Method> methods;
 
     String type;
-
+    String extension = "java";
 }

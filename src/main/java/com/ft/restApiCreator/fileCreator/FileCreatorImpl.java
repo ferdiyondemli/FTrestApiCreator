@@ -3,11 +3,12 @@ package com.ft.restApiCreator.fileCreator;
 import com.ft.restApiCreator.fileCreator.fileComponent.*;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+
 
 @Service
 public class FileCreatorImpl implements FileCreator {
@@ -56,12 +57,12 @@ public class FileCreatorImpl implements FileCreator {
 
 
     @Override
-    public void createJavaFile(JavaFile javaFile, String path) throws IOException {
+    public void createJavaFile(RestApiFile file, String path) throws IOException {
 
-        File myObj = new File(path + "/" + javaFile.getJavaName() + ".java");
+        File myObj = new File(path + "/" + file.getJavaName() + "." + file.getExtension());
         if (myObj.createNewFile()) {
             System.out.println("File created: " + myObj.getName() + path);
-            writeFile(javaFile, myObj.getPath(), path);
+            writeFile(file, myObj.getPath(), path);
         } else {
             System.out.println("File already exists.");
         }
@@ -69,9 +70,14 @@ public class FileCreatorImpl implements FileCreator {
     }
 
     @Override
-    public void writeFile(JavaFile javaFile, String fileName, String path) {
+    public void writeFile(RestApiFile file, String fileName, String path) {
+        String text = "";
+        if(file.getExtension().equals("java")){
+            text = createJavaFileText((JavaRestApiFile) file, path);
+        }else {
+            text = createJsFileText((JsRestApiFile) file, path);
 
-        String text = createJavaFileText(javaFile, path);
+        }
         try {
             FileWriter myWriter = new FileWriter(fileName);
             myWriter.write(text);
@@ -84,7 +90,7 @@ public class FileCreatorImpl implements FileCreator {
     }
 
     @Override
-    public String createJavaFileText(JavaFile javaFile, String path) {
+    public String createJavaFileText(JavaRestApiFile javaFile, String path) {
         String packageName = "";
         if (path.contains("java")) {
             packageName = "package " + path.split("java/")[1].replace("/", ".") + "; \n";
@@ -102,12 +108,44 @@ public class FileCreatorImpl implements FileCreator {
 
                 " {" +
 
-                getFields(javaFile.getFields()) +
+                getJavaFileFields(javaFile.getFields()) +
 
                 getMethods(javaFile.getMethods(), javaFile.getType()) +
 
                 "\n }";
 
+    }
+
+    @Override
+    public String createJsFileText(JsRestApiFile jsFile, String path) {
+
+        return " import {\n" +
+                "    isEmptyString,\n" +
+                "    navigate,\n" +
+                "    T,\n" +
+                "    translate,\n" +
+                "    useLocation,\n" +
+                "    YteAddComponent as AddComponent,\n" +
+                "  YteUpdateComponent as UpdateComponent,\n"+
+                "  YteViewComponent as ViewComponent,\n"+
+                "    YteAutonumericInput,\n" +
+                "    YteButton,\n" +
+                "    YteDateInput,\n" +
+                "    YteForm as Form,\n" +
+                "    YteFormElement as FormElement,\n" +
+                "    YteMoneyInput,\n" +
+                "    YteNumberInput,\n" +
+                "    YtePanel as Panel,\n" +
+                "    YteColumn as Column,\n" +
+                "    YteCriteriaAndQueryPanel as CriteriaAndQueryPanel,\n" +
+                "    YteSelectInput,\n" +
+                "    YteTextInput,\n" +
+                "    YteValidator as Validator\n" +
+                "} from \"hbs-react-core\";"+
+                "import {HbsInput, HbsIputContext} from \"../../../../genel/HbsInput\";"+
+                "  const " + jsFile.getJavaName() +
+
+                getJsFileFields(jsFile.getFields());
     }
 
 
@@ -128,8 +166,19 @@ public class FileCreatorImpl implements FileCreator {
         }
         return string.toString();
     }
+    private String getJsFileFields(List<Field> fields) {
+        if (fields == null) return "";
 
-    private String getFields(List<Field> fields) {
+        StringBuilder string = new StringBuilder("\n");
+
+        for (int i = 0; i < fields.size(); i++) {
+
+            string.append( fields.get(i).getName()  + "\n");
+
+        }
+        return string.toString();
+    }
+    private String getJavaFileFields(List<Field> fields) {
         if (fields == null) return "";
 
         StringBuilder string = new StringBuilder("\n");

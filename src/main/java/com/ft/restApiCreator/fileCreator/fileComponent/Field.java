@@ -15,6 +15,11 @@ public class Field {
 
     List<String> annotations;
 
+    Boolean isQueryable;
+    Boolean isEnum;
+    String yteInputType;
+
+
 
 
 

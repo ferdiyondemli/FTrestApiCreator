@@ -10,7 +10,7 @@ import java.util.List;
 public class DirectoryFile {
     String directoryName;
     String directoryPath;
-    List<JavaFile> javaFiles;
+    List<? extends RestApiFile> javaFiles;
     List<DirectoryFile> directoryFiles;
 
 }
