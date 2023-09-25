@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -10,10 +10,13 @@
 	</parent>
 	<groupId>com.ft</groupId>
 	<artifactId>restApiCreator</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>restApiCreator</name>
 	<description>This library is used for creating rest api</description>
 	<properties>
+		<mapstruct.version>1.4.2.Final</mapstruct.version>
+		<lombok.version>1.18.20</lombok.version>
+		<version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
@@ -33,9 +36,28 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
+			<version>${version.mapstruct-lombok}</version>
+		</dependency>
 	</dependencies>
 
-<!--	<build>
+	<!--<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -50,6 +72,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>-->
-
+	</build>
+-->
 </project>

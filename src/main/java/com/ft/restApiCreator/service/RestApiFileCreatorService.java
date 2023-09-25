@@ -1,9 +1,9 @@
 package com.ft.restApiCreator.service;
 
 
-import com.ft.restApiCreator.fileCreator.fileComponent.RequestFile;
+import com.ft.restApiCreator.filecomponent.RequestFile;
 
 public interface RestApiFileCreatorService {
 
-    public void createFiles(RequestFile requestFile);
+      void createFiles(RequestFile requestFile);
 }

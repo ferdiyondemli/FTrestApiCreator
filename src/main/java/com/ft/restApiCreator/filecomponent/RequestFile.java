@@ -1,4 +1,4 @@
-package com.ft.restApiCreator.fileCreator.fileComponent;
+package com.ft.restApiCreator.filecomponent;
 
 import lombok.Getter;
 import lombok.Setter;
